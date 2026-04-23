@@ -12,13 +12,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		..\.editorconfig = ..\.editorconfig
 		Directory.Build.props = Directory.Build.props
+		docker-compose.yml = docker-compose.yml
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DS.Application", "src\DS.Application\DS.Application.csproj", "{69ECC3F0-EECB-4FAB-8CD7-DD943077FE27}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DS.Infrastructure", "src\DS.Infrastructure\DS.Infrastructure.csproj", "{7E920596-ABBF-42DA-B6AF-8972C2F83C64}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DS.Infrastructure.Postgresql", "src\DS.Infrastructure.Postgresql\DS.Infrastructure.Postgresql.csproj", "{7E920596-ABBF-42DA-B6AF-8972C2F83C64}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DS.Contracts", "src\DS.Contracts\DS.Contracts.csproj", "{7AC709E8-00D1-4090-8052-584D57804D89}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "src\Shared\Shared.csproj", "{A4E22BDA-AF6D-45ED-8819-3071C53C2CD6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -50,6 +53,10 @@ Global
 		{7AC709E8-00D1-4090-8052-584D57804D89}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7AC709E8-00D1-4090-8052-584D57804D89}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7AC709E8-00D1-4090-8052-584D57804D89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4E22BDA-AF6D-45ED-8819-3071C53C2CD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4E22BDA-AF6D-45ED-8819-3071C53C2CD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4E22BDA-AF6D-45ED-8819-3071C53C2CD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4E22BDA-AF6D-45ED-8819-3071C53C2CD6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{C837B7FD-1EF5-4D39-8378-D36F9E9D43EA} = {9905DC48-1079-490C-9DEA-39D79E7E22A0}
@@ -58,5 +65,6 @@ Global
 		{69ECC3F0-EECB-4FAB-8CD7-DD943077FE27} = {9905DC48-1079-490C-9DEA-39D79E7E22A0}
 		{7E920596-ABBF-42DA-B6AF-8972C2F83C64} = {9905DC48-1079-490C-9DEA-39D79E7E22A0}
 		{7AC709E8-00D1-4090-8052-584D57804D89} = {9905DC48-1079-490C-9DEA-39D79E7E22A0}
+		{A4E22BDA-AF6D-45ED-8819-3071C53C2CD6} = {9905DC48-1079-490C-9DEA-39D79E7E22A0}
 	EndGlobalSection
 EndGlobal

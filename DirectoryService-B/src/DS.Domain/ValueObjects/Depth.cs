@@ -16,6 +16,11 @@ public record Depth
                 Value++;
         }
     }
+    
+    private Depth(short value)
+    {
+        Value = value;
+    }
 
     public short Value { get; }
 
@@ -26,4 +31,6 @@ public record Depth
 
         return new Depth(path);
     }
+    
+    public static Depth FromValue(short value) => new(value);
 }
