@@ -6,6 +6,10 @@ public record Path
 {
     private const char SEPARATOR = '/';
 
+    private Path(string value)
+    {
+        Value = value;
+    }
 
     private Path(Path? parentPath, Identifier identifier)
     {
@@ -35,5 +39,13 @@ public record Path
             return Result.Failure<Path>("Идентификатор должен быть заполнен");
 
         return new Path(parentPath, identifier);
+    }
+
+    public static Path ReadPath(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            throw new InvalidOperationException($"Невалидное значение Path в БД: '{value}'");
+    
+        return new Path(value);
     }
 }

@@ -18,7 +18,7 @@ public class Department
         Name = name;
         ParentId = parentId;
         Identifier = identifier;
-        Depth = depth;
+        Depth = depth; 
         Path = path;
         IsActive = true;
         CreatedAt = DateTime.UtcNow;

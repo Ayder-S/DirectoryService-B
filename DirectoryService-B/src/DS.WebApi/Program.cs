@@ -1,9 +1,26 @@
-using Scalar.AspNetCore;
+using DS.Infrastructure.Postgresql;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
+
+var connectionString = builder.Configuration.GetConnectionString(nameof(DirectoryServiceDbContext))!;
+
+builder.Services.AddDbContext<DirectoryServiceDbContext>((serviceProvider, options) =>
+{
+    options.UseNpgsql(connectionString);
+
+    if (builder.Environment.IsDevelopment())
+    {
+        var loggerFactory = serviceProvider.GetRequiredService<ILoggerFactory>();
+
+        options
+            .UseLoggerFactory(loggerFactory)
+            .EnableSensitiveDataLogging();
+    }
+});
 
 var app = builder.Build();
 

@@ -1,12 +1,11 @@
 ﻿using CSharpFunctionalExtensions;
+using Shared.Constants;
+
 
 namespace DS.Domain.ValueObjects;
 
 public record Name
-{
-    private const int MIN_LENGTH = 3;
-    private const int MAX_LENGTH = 150;
-
+{ 
     private Name(string value)
     {
         Value = value;
@@ -17,8 +16,10 @@ public record Name
 
     public static Result<Name> Create(string value)
     {
-        if (string.IsNullOrWhiteSpace(value) || value.Length < MIN_LENGTH || value.Length > MAX_LENGTH)
-            return Result.Failure<Name>($"Название должно быть длиной от {MIN_LENGTH} до {MAX_LENGTH} символов");
+        if (string.IsNullOrWhiteSpace(value) 
+            || value.Length < LengthConstants.Name.MIN_LENGTH
+            || value.Length > LengthConstants.Name.MAX_LENGTH)
+            return Result.Failure<Name>($"Название должно быть длиной от {LengthConstants.Name.MIN_LENGTH} до {LengthConstants.Name.MAX_LENGTH} символов");
 
         string normalized = value.Trim();
 
