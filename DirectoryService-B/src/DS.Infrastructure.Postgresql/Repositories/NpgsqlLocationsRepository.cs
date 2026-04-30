@@ -1,0 +1,44 @@
+﻿using System.Data;
+using System.Text.Json;
+using Dapper;
+using DS.Application.Database;
+using DS.Domain.Entities;
+using DS.Infrastructure.Postgresql.Database;
+
+namespace DS.Infrastructure.Postgresql.Repositories;
+
+public class NpgsqlLocationsRepository : ILocationsRepository
+{
+    private readonly IDbConnectionFactory _connectionFactory;
+
+    public NpgsqlLocationsRepository(IDbConnectionFactory connectionFactory)
+    {
+        _connectionFactory = connectionFactory;
+    }
+    
+    public async Task<Guid> Add(
+        Location location,
+        CancellationToken cancellationToken)
+    {
+        using var connection = await _connectionFactory.CreateConnectionAsync();
+
+        const string locationInsertSql = """
+                                         INSERT INTO locations (id, name, address, timezone, is_active, created_at, updated_at)
+                                         VALUES (@Id, @Name, @Address::jsonb, @Timezone, @IsActive, @CreatedAt, @UpdatedAt)
+                                         """;
+
+        // Dapper не поддерживает приведение типов ::jsonb прямо в параметре. Нужно передавать jsonb через NpgsqlParameter
+        var parameters = new DynamicParameters();
+        parameters.Add("Id", location.Id);
+        parameters.Add("Name", location.Name.Value);
+        parameters.Add("Address", JsonSerializer.Serialize(location.Address), DbType.Object);
+        parameters.Add("Timezone", location.Timezone.Value);
+        parameters.Add("IsActive", location.IsActive);
+        parameters.Add("CreatedAt", location.CreatedAt);
+        parameters.Add("UpdatedAt", location.UpdatedAt);
+
+        await connection.ExecuteAsync(locationInsertSql, parameters);
+
+        return location.Id;
+    }
+}

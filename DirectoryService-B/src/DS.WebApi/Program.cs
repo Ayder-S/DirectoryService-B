@@ -1,4 +1,8 @@
+using DS.Application.Database;
+using DS.Application.Locations;
 using DS.Infrastructure.Postgresql;
+using DS.Infrastructure.Postgresql.Database;
+using DS.Infrastructure.Postgresql.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,7 +12,8 @@ builder.Services.AddOpenApi();
 
 var connectionString = builder.Configuration.GetConnectionString(nameof(DirectoryServiceDbContext))!;
 
-builder.Services.AddDbContext<DirectoryServiceDbContext>((serviceProvider, options) =>
+builder.Services.AddDbContext<DirectoryServiceDbContext>(
+    (serviceProvider, options) =>
 {
     options.UseNpgsql(connectionString);
 
@@ -18,9 +23,19 @@ builder.Services.AddDbContext<DirectoryServiceDbContext>((serviceProvider, optio
 
         options
             .UseLoggerFactory(loggerFactory)
-            .EnableSensitiveDataLogging();
+            .EnableSensitiveDataLogging()
+            .EnableDetailedErrors();
     }
 });
+
+builder.Services.AddSingleton<IDbConnectionFactory, NpgsqlConnectionFactory>();
+
+builder.Services.AddScoped<ILocationsRepository, EfCoreLocationsRepository>();
+// builder.Services.AddScoped<ILocationsRepository, NpgsqlLocationsRepository>();
+
+builder.Services.AddScoped<CreateLocationHandler>();
+
+
 
 var app = builder.Build();
 
