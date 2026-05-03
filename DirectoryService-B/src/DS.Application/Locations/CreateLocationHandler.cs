@@ -40,9 +40,12 @@ public class CreateLocationHandler : ICommandHandler<Guid, CreateLocationCommand
             return Result.Failure<Guid>(timezoneResult.Error);
         
         var location = Location.Create(nameResult.Value, addressResult.Value, timezoneResult.Value);
+        if (!location.IsSuccess)
+            return Result.Failure<Guid>(location.Error);
 
         await _locationsRepository.Add(location.Value, cancellationToken);
         
-        return location.Value.Id;
+        return Result.Success(location.Value.Id);
+
     }
 }
