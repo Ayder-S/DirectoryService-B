@@ -1,5 +1,4 @@
 using DS.Application.Abstractions;
-using DS.Application.Database;
 using DS.Application.Locations;
 using DS.Contracts;
 using Microsoft.AspNetCore.Mvc;
