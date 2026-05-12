@@ -44,8 +44,10 @@ public class CreateLocationHandler : ICommandHandler<CreateLocationCommand, Guid
         if(location.IsFailure)
             return location.Error.ToFailures();
 
-        await _locationsRepository.Add(location.Value, cancellationToken);
-        
+        var addResult = await _locationsRepository.Add(location.Value, cancellationToken);
+        if (addResult.IsFailure)
+            return addResult.Error.ToFailures();
+
         return location.Value.Id;
 
     }
