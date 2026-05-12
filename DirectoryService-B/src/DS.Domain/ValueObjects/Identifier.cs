@@ -22,15 +22,15 @@ public record Identifier
     public static Result<Identifier, Error> Create(string? value)
     {
         if (string.IsNullOrWhiteSpace(value))
-            return Error.Validation("identifier.is.not.valid", "Идентификатор должен быть заполнен");
+            return Error.Validation("identifier.is.not.valid", "Идентификатор должен быть заполнен", "identifier");
 
         string normalized = value.Trim().ToLowerInvariant();
 
         if (normalized.Length < LengthConstants.Identifier.MIN_LENGTH || normalized.Length > LengthConstants.Identifier.MAX_LENGTH)
-            return Error.Validation("identifier.is.not.valid", $"Идентификатор может быть длиной от {LengthConstants.Identifier.MIN_LENGTH} до {LengthConstants.Identifier.MAX_LENGTH} символов");
+            return Error.Validation("identifier.is.not.valid", $"Идентификатор может быть длиной от {LengthConstants.Identifier.MIN_LENGTH} до {LengthConstants.Identifier.MAX_LENGTH} символов", "identifier");
 
         if (!_identifierFormat.IsMatch(normalized))
-            return Error.Validation("identifier.is.not.valid", "Идентификатор может состоять только из латиницы , а также дефиса только в середине идентификатора");
+            return Error.Validation("identifier.is.not.valid", "Идентификатор может состоять только из латиницы, а также дефиса только в середине идентификатора", "identifier");
 
         return new Identifier(normalized);
     }

@@ -16,12 +16,12 @@ public sealed record Timezone
     public static Result<Timezone, Error> Create(string value)
     {
         if (string.IsNullOrWhiteSpace(value))
-            return Error.Failure("timezone.is.not.valid", "Часовой пояс не может быть пустым ");
+            return Error.Validation("timezone.is.not.valid", "Часовой пояс не может быть пустым", "timezone");
 
         string normalized = value.Trim();
 
         if (!IsValid(normalized))
-            return Error.Failure("timezone.is.not.valid", "Невалидный IANA код - пример верного формата : Europe/Moscow");
+            return Error.Validation("timezone.is.not.valid", "Невалидный IANA код — пример верного формата: Europe/Moscow", "timezone");
 
         return new Timezone(normalized);
     }

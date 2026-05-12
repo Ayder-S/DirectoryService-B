@@ -28,25 +28,29 @@ public record Address
         string? street, 
         string? building)
     {
-        if (string.IsNullOrWhiteSpace(country)
-            || string.IsNullOrWhiteSpace(region) 
-            || string.IsNullOrWhiteSpace(city))
-            return Error.Failure("record.is.not.valid", "Страна, регион и город обязательны");
+        if (string.IsNullOrWhiteSpace(country))
+            return Error.Validation("country.is.required", "Страна обязательна", "address.country");
+
+        if (string.IsNullOrWhiteSpace(region))
+            return Error.Validation("region.is.required", "Регион обязателен", "address.region");
+
+        if (string.IsNullOrWhiteSpace(city))
+            return Error.Validation("city.is.required", "Город обязателен", "address.city");
 
         if (country.Length > LengthConstants.Address.MAX_LENGTH)
-            return Error.Failure("country.is.not.valid", "Слишком длинное название страны");
-
-        if (city.Length > LengthConstants.Address.MAX_LENGTH)
-            return Error.Failure("city.is.not.valid", "Слишком длинное название города");
+            return Error.Validation("country.is.not.valid", "Слишком длинное название страны", "address.country");
 
         if (region.Length > LengthConstants.Address.MAX_LENGTH)
-            return Error.Failure("region.is.not.valid", "Слишком длинное название региона или области");
+            return Error.Validation("region.is.not.valid", "Слишком длинное название региона или области", "address.region");
+
+        if (city.Length > LengthConstants.Address.MAX_LENGTH)
+            return Error.Validation("city.is.not.valid", "Слишком длинное название города", "address.city");
 
         if (street?.Length > LengthConstants.Address.MAX_LENGTH)
-            return Error.Failure(string.Empty, "Слишком длинная улица");
+            return Error.Validation("street.is.not.valid", "Слишком длинная улица", "address.street");
 
         if (building?.Length > LengthConstants.Address.MAX_LENGTH)
-            return Error.Failure(string.Empty, "Слишком длинный номер здания");
+            return Error.Validation("building.is.not.valid", "Слишком длинный номер здания", "address.building");
 
         country = country.Trim();
         city = city.Trim();

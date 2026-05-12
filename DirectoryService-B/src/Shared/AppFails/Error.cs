@@ -1,4 +1,6 @@
-﻿namespace Shared.Failures;
+﻿using System.Text.Json.Serialization;
+
+namespace Shared.Failures;
 
 public record Error
 {
@@ -36,6 +38,7 @@ public record Error
     public ErrorsList ToFailures() => this;
 }
 
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum ErrorType
 {
     /// <summary>

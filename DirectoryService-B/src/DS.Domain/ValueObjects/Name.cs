@@ -17,10 +17,10 @@ public record Name
 
     public static Result<Name, Error> Create(string value)
     {
-        if (string.IsNullOrWhiteSpace(value) 
+        if (string.IsNullOrWhiteSpace(value)
             || value.Length < LengthConstants.Name.MIN_LENGTH
             || value.Length > LengthConstants.Name.MAX_LENGTH)
-            return Error.Failure("name.is.not.valid", $"Название должно быть длиной от {LengthConstants.Name.MIN_LENGTH} до {LengthConstants.Name.MAX_LENGTH} символов");
+            return Error.Validation("name.is.not.valid", $"Название должно быть длиной от {LengthConstants.Name.MIN_LENGTH} до {LengthConstants.Name.MAX_LENGTH} символов", "name");
 
         string normalized = value.Trim();
 
