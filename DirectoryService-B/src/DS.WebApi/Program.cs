@@ -4,6 +4,7 @@ using DS.Application.Locations;
 using DS.Infrastructure.Postgresql;
 using DS.Infrastructure.Postgresql.Database;
 using DS.Infrastructure.Postgresql.Repositories;
+using DS.WebApi.Middlewares;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -46,6 +47,8 @@ builder.Services.AddScoped<CreateLocationHandler>();
 
 
 var app = builder.Build();
+
+app.UseExceptionMiddleware();
 
 if (app.Environment.IsDevelopment())
 {
