@@ -2,6 +2,7 @@ using DS.Application.Abstractions;
 using DS.Application.Locations;
 using DS.Contracts;
 using Microsoft.AspNetCore.Mvc;
+using Shared;
 
 namespace DS.Presenters.Controllers;
 
@@ -16,11 +17,11 @@ public class LocationsController : ControllerBase
         CancellationToken cancellationToken)
     {
         var command = new CreateLocationCommand(request);
-        
+
         var result = await handler.Handle(command, cancellationToken);
-        if(!result.IsSuccess)
-            return BadRequest(result.Error);
-        
-        return Ok(result.Value);
+        if(result.IsFailure)
+            return BadRequest(Envelope.Fail(result.Error));
+
+        return Ok(Envelope.Ok(result.Value));
     }
 }
