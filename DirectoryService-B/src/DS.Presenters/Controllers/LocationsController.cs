@@ -11,7 +11,7 @@ public class LocationsController : ControllerBase
 {
     [HttpPost]
     public async Task<IActionResult> Create(
-        [FromServices] ICommandHandler<Guid, CreateLocationCommand> handler,
+        [FromServices] ICommandHandler<CreateLocationCommand, Guid> handler,
         [FromBody] CreateLocationRequest request,
         CancellationToken cancellationToken)
     {

@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using DS.Domain.Relation;
 using DS.Domain.ValueObjects;
+using Shared.Failures;
 
 namespace DS.Domain.Entities;
 
@@ -9,8 +10,8 @@ public class Location
     private readonly List<DepartmentLocation> _departments = [];
     
     private Location() { }
-  
-    public Location(Name name, Address address, Timezone timezone)
+
+    private Location(Name name, Address address, Timezone timezone)
     {
         Id = Guid.NewGuid();
         Name = name;
@@ -37,7 +38,7 @@ public class Location
     
     public DateTime UpdatedAt { get; private set; }
 
-    public static Result<Location> Create(Name name, Address address, Timezone timezone)
+    public static Result<Location, Error> Create(Name name, Address address, Timezone timezone)
     {
         return new Location(name, address, timezone);
     }

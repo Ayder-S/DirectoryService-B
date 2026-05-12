@@ -6,6 +6,7 @@ using DS.Application.Database;
 using DS.Domain.Entities;
 using DS.Infrastructure.Postgresql.Database;
 using Microsoft.Extensions.Logging;
+using Shared.Failures;
 
 namespace DS.Infrastructure.Postgresql.Repositories;
 
@@ -20,17 +21,17 @@ public class NpgsqlLocationsRepository : ILocationsRepository
         _logger = logger;
     }
 
-    public async Task<Result<Guid>> Add(Location location, CancellationToken cancellationToken)
+    public async Task<Result<Guid, Error>> Add(Location location, CancellationToken cancellationToken)
     {
         using var connection = await _connectionFactory.CreateConnectionAsync(cancellationToken);
 
-        var transaction = connection.BeginTransaction();
+        using var transaction = connection.BeginTransaction();
 
         try
         {
             const string locationInsertSql = """
                                              INSERT INTO locations (id, name, address, timezone, is_active, created_at, updated_at)
-                                             VALUES (@Id, @Name, @Address::jsonb, @Timezone, @IsActive, @CreatedAt, @UpdatedAt)
+                                              VALUES (@Id, @Name, @Address::jsonb, @Timezone, @IsActive, @CreatedAt, @UpdatedAt)
                                              """;
 
             // Dapper не поддерживает приведение типов ::jsonb прямо в параметре. Нужно передавать jsonb через NpgsqlParameter
@@ -53,9 +54,9 @@ public class NpgsqlLocationsRepository : ILocationsRepository
         {
             transaction.Rollback();
             
-            _logger.LogError(exception, exception.Message);
-            
-            return Result.Failure<Guid>(exception.Message);
+            _logger.LogError(exception, "Не удалось сохранить локацию {LocationId}", location.Id);
+
+            return Error.Failure("location.add.failed", "Не удалось сохранить локацию");
         }
     }
 }

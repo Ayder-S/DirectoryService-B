@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using Shared.Constants;
+using Shared.Failures;
 
 namespace DS.Domain.ValueObjects;
 
@@ -20,7 +21,7 @@ public record Address
     public string? Street { get; }
     public string? Building { get; }
 
-    public static Result<Address> Create(
+    public static Result<Address, Error> Create(
         string country, 
         string region, 
         string city, 
@@ -30,22 +31,22 @@ public record Address
         if (string.IsNullOrWhiteSpace(country)
             || string.IsNullOrWhiteSpace(region) 
             || string.IsNullOrWhiteSpace(city))
-            return Result.Failure<Address>("Страна, регион и город обязательны");
+            return Error.Failure("record.is.not.valid", "Страна, регион и город обязательны");
 
         if (country.Length > LengthConstants.Address.MAX_LENGTH)
-            return Result.Failure<Address>("Слишком длинное название страны");
+            return Error.Failure("country.is.not.valid", "Слишком длинное название страны");
 
         if (city.Length > LengthConstants.Address.MAX_LENGTH)
-            return Result.Failure<Address>("Слишком длинное название города");
+            return Error.Failure("city.is.not.valid", "Слишком длинное название города");
 
         if (region.Length > LengthConstants.Address.MAX_LENGTH)
-            return Result.Failure<Address>("Слишком длинное название региона или области");
+            return Error.Failure("region.is.not.valid", "Слишком длинное название региона или области");
 
         if (street?.Length > LengthConstants.Address.MAX_LENGTH)
-            return Result.Failure<Address>("Слишком длинная улица");
+            return Error.Failure(string.Empty, "Слишком длинная улица");
 
         if (building?.Length > LengthConstants.Address.MAX_LENGTH)
-            return Result.Failure<Address>("Слишком длинный номер здания");
+            return Error.Failure(string.Empty, "Слишком длинный номер здания");
 
         country = country.Trim();
         city = city.Trim();
