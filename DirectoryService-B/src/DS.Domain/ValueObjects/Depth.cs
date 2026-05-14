@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using Shared.AppFails;
 
 namespace DS.Domain.ValueObjects;
 
@@ -24,10 +25,10 @@ public record Depth
 
     public short Value { get; }
 
-    public static Result<Depth> Create(Path path)
+    public static Result<Depth, Error> Create(Path path)
     {
         if (path is null)
-            return Result.Failure<Depth>("Путь не может быть пустым");
+            return Error.Validation("path.is.not.valid", "Путь не может быть пустым");
 
         return new Depth(path);
     }

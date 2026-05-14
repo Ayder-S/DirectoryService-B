@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using Shared.AppFails;
 using TimeZoneConverter;
 
 namespace DS.Domain.ValueObjects;
@@ -12,15 +13,15 @@ public sealed record Timezone
         Value = value;
     }
 
-    public static Result<Timezone> Create(string value)
+    public static Result<Timezone, Error> Create(string value)
     {
         if (string.IsNullOrWhiteSpace(value))
-            return Result.Failure<Timezone>("Часовой пояс не может быть пустым ");
+            return Error.Validation("timezone.is.not.valid", "Часовой пояс не может быть пустым", "timezone");
 
         string normalized = value.Trim();
 
         if (!IsValid(normalized))
-            return Result.Failure<Timezone>("Невалидный IANA код - пример верного формата : Europe/Moscow");
+            return Error.Validation("timezone.is.not.valid", "Невалидный IANA код — пример верного формата: Europe/Moscow", "timezone");
 
         return new Timezone(normalized);
     }
@@ -41,4 +42,6 @@ public sealed record Timezone
             return false;
         }
     }
+    
+    public static Timezone ReadTimezone(string value) => new Timezone(value);
 }

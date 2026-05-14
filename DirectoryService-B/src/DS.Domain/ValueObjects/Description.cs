@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using Shared.AppFails;
 using Shared.Constants;
 
 namespace DS.Domain.ValueObjects;
@@ -13,11 +14,12 @@ public record Description
     public string? Value { get; }
 
 
-    public static Result<Description> Create(string? description)
+    public static Result<Description, Error> Create(string? description)
     {
         if (description?.Length > LengthConstants.Description.MAX_LENGTH)
-            return Result.Failure<Description>("Введено слишком длинное описание");
-
+            return Error.Validation("description.is.not.valid", "Введено слишком длинное описание", "description");
         return new Description(description?.Trim());
     }
+
+    public static Description ReadDescription(string? value) => new Description(value);
 }

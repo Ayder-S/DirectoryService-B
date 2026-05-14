@@ -1,15 +1,34 @@
 using DS.Application;
 using DS.Application.Database;
-using DS.Application.Locations;
 using DS.Infrastructure.Postgresql;
 using DS.Infrastructure.Postgresql.Database;
 using DS.Infrastructure.Postgresql.Repositories;
+using DS.WebApi.Middlewares;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
-builder.Services.AddOpenApi();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+        options.JsonSerializerOptions.Converters
+            .Add(new System.Text.Json.Serialization.JsonStringEnumConverter())); // глобальный конвертер enum'ов в строки
+
+
+builder.Services.AddOpenApi(options =>
+{
+    options.AddSchemaTransformer((schema, context, _) =>
+    {
+        if (context.JsonTypeInfo.Type.IsEnum)
+        {
+            schema.Type = "string";
+            schema.Format = null;
+            schema.Enum = [..Enum.GetNames(context.JsonTypeInfo.Type)
+                .Select(name => new Microsoft.OpenApi.Any.OpenApiString(name))];
+        }
+
+        return Task.CompletedTask;
+    });
+});
 
 var connectionString = builder.Configuration.GetConnectionString(nameof(DirectoryServiceDbContext))!;
 
@@ -31,17 +50,16 @@ builder.Services.AddDbContext<DirectoryServiceDbContext>(
 
 builder.Services.AddSingleton<IDbConnectionFactory, NpgsqlConnectionFactory>();
 
-// builder.Services.AddScoped<ILocationsRepository, EfCoreLocationsRepository>();
-builder.Services.AddScoped<ILocationsRepository, NpgsqlLocationsRepository>();
+builder.Services.AddScoped<ILocationsRepository, EfCoreLocationsRepository>();
+// builder.Services.AddScoped<ILocationsRepository, NpgsqlLocationsRepository>();
 
 
 builder.Services.AddApplication();
 
-builder.Services.AddScoped<CreateLocationHandler>();
-
-
 
 var app = builder.Build();
+
+app.UseExceptionMiddleware();
 
 if (app.Environment.IsDevelopment())
 {

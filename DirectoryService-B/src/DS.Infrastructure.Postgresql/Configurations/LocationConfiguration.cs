@@ -22,7 +22,7 @@ public class LocationConfiguration : IEntityTypeConfiguration<Location>
             .HasColumnName("name")
             .HasConversion(
                 ln => ln.Value,
-                s => Name.Create(s).Value)
+                s => Name.ReadName(s))
             .HasMaxLength(LengthConstants.Name.MAX_LENGTH)
             .IsRequired();
 
@@ -55,7 +55,7 @@ public class LocationConfiguration : IEntityTypeConfiguration<Location>
             .HasColumnName("timezone")
             .HasConversion(
                 lt => lt.Value,
-                s => Timezone.Create(s).Value)
+                s => Timezone.ReadTimezone(s))
             .IsRequired();
         
         builder.Property(l => l.IsActive)

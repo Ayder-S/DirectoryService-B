@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using DS.Domain.Relation;
 using DS.Domain.ValueObjects;
+using Shared.AppFails;
 using Path = DS.Domain.ValueObjects.Path;
 
 namespace DS.Domain.Entities;
@@ -12,7 +13,7 @@ public class Department
     
     private Department() { }
 
-    public Department(Name name, Guid? parentId, Identifier identifier, Depth depth, Path path)
+    private Department(Name name, Guid? parentId, Identifier identifier, Depth depth, Path path)
     {
         Id = Guid.NewGuid();
         Name = name;
@@ -29,7 +30,7 @@ public class Department
 
     public IReadOnlyList<DepartmentLocation> Locations => _locations;
 
-    public Guid Id { get;  private set; }
+    public Guid Id { get; private set; }
 
     public Guid? ParentId { get; private set; }
 
@@ -46,19 +47,18 @@ public class Department
     public DateTime CreatedAt { get; private set; }
 
     public DateTime UpdatedAt { get; private set; }
-
-
-    public static Result<Department> Create(Name name, Identifier identifier, Department? parent = null)
+    
+    public static Result<Department, Error> Create(Name name, Identifier identifier, Department? parent = null)
     {
         var pathResult = parent is null ? Path.CreateParent(identifier) : Path.CreateChild(parent.Path, identifier);
 
         if (pathResult.IsFailure)
-            return Result.Failure<Department>(pathResult.Error);
+            return Result.Failure<Department, Error>(pathResult.Error);
 
         var depthResult = Depth.Create(pathResult.Value);
 
         if (depthResult.IsFailure)
-            return Result.Failure<Department>(depthResult.Error);
+            return Result.Failure<Department, Error>(depthResult.Error);
         
         return new Department(name, parent?.Id, identifier, depthResult.Value, pathResult.Value);
     }

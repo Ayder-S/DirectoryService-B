@@ -1,8 +1,10 @@
 using DS.Application.Abstractions;
-using DS.Application.Database;
 using DS.Application.Locations;
 using DS.Contracts;
 using Microsoft.AspNetCore.Mvc;
+using Shared;
+using Shared.AppFails;
+using Shared.EndpointsResult;
 
 namespace DS.Presenters.Controllers;
 
@@ -11,17 +13,11 @@ namespace DS.Presenters.Controllers;
 public class LocationsController : ControllerBase
 {
     [HttpPost]
-    public async Task<IActionResult> Create(
+    public async Task<EndpointResult<Guid>> Create(
         [FromServices] ICommandHandler<Guid, CreateLocationCommand> handler,
         [FromBody] CreateLocationRequest request,
         CancellationToken cancellationToken)
     {
-        var command = new CreateLocationCommand(request);
-        
-        var result = await handler.Handle(command, cancellationToken);
-        if(!result.IsSuccess)
-            return BadRequest(result.Error);
-        
-        return Ok(result.Value);
+        return await handler.Handle(new CreateLocationCommand(request), cancellationToken);
     }
 }

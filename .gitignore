@@ -482,3 +482,36 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+#
+.env.*
+!.env.example
+*.local
+appsettings.*.json
+!appsettings.Development.json
+secrets.json
+*secrets*.json
+*credentials*.json
+serviceAccountKey*.json
+
+# User Secrets (ASP.NET Core)
+secrets/
+
+# Azure
+*.publishsettings         
+local.settings.json      
+
+#
+.claude/
+.cursor/
+.cursorignore
+.cursorindexingignore
+.continue/
+.codeium/
+.windsurf/
+
+
+scratch/
+drafts/
+playground/
+notes/

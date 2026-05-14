@@ -18,7 +18,7 @@ public class PositionConfiguration : IEntityTypeConfiguration<Position>
             .HasColumnName("name")
             .HasConversion(
                 pn => pn.Value,
-                s => Name.Create(s).Value)
+                s => Name.ReadName(s))
             .HasMaxLength(LengthConstants.Name.MAX_LENGTH)
             .IsRequired();
 
@@ -26,7 +26,7 @@ public class PositionConfiguration : IEntityTypeConfiguration<Position>
             .HasColumnName("description")
             .HasConversion(
                 pb => pb.Value,
-                s => Description.Create(s).Value)
+                s => Description.ReadDescription(s))
             .IsRequired(false);
         
         builder.Property(p => p.IsActive)

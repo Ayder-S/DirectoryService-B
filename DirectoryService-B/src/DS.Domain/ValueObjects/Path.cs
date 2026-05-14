@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using Shared.AppFails;
 
 namespace DS.Domain.ValueObjects;
 
@@ -22,21 +23,21 @@ public record Path
     public char PathSeparator => SEPARATOR;
     public string Value { get; }
 
-    public static Result<Path> CreateParent(Identifier identifier)
+    public static Result<Path, Error> CreateParent(Identifier identifier)
     {
         if (identifier is null)
-            return Result.Failure<Path>("Идентификатор должен быть заполнен");
+            return Error.Failure("identifier.is.not.valid", "Идентификатор должен быть заполнен");
 
         return new Path(null, identifier);
     }
 
-    public static Result<Path> CreateChild(Path? parentPath, Identifier identifier)
+    public static Result<Path, Error> CreateChild(Path? parentPath, Identifier identifier)
     {
         if (parentPath == null)
-            return Result.Failure<Path>("Не введен родительский путь");
+            return Error.Failure("parentPath.is.not.valid", "Не введен родительский путь");
         
         if (identifier is null)
-            return Result.Failure<Path>("Идентификатор должен быть заполнен");
+            return Error.Failure("identifier.is.not.valid", "Идентификатор должен быть заполнен");
 
         return new Path(parentPath, identifier);
     }

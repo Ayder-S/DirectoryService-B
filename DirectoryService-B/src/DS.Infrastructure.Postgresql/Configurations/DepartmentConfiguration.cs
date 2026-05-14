@@ -25,7 +25,7 @@ public class DepartmentConfiguration : IEntityTypeConfiguration<Department>
             .HasColumnName("name")
             .HasConversion(
                 dn => dn.Value,
-                s => Name.Create(s).Value)
+                s => Name.ReadName(s))
             .HasMaxLength(LengthConstants.Name.MAX_LENGTH)
             .IsRequired();
         
@@ -33,7 +33,7 @@ public class DepartmentConfiguration : IEntityTypeConfiguration<Department>
             .HasColumnName("identifier")
             .HasConversion(
                 di => di.Value,
-                s => Identifier.Create(s).Value)
+                s => Identifier.ReadIdentifier(s))
             .HasMaxLength(LengthConstants.Identifier.MAX_LENGTH)
             .IsRequired();
 

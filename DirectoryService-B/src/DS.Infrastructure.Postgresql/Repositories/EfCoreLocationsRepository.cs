@@ -2,6 +2,7 @@
 using DS.Application.Database;
 using DS.Domain.Entities;
 using Microsoft.Extensions.Logging;
+using Shared.AppFails;
 
 namespace DS.Infrastructure.Postgresql.Repositories;
 
@@ -16,11 +17,11 @@ public class EfCoreLocationsRepository : ILocationsRepository
         _logger = logger;
     }
 
-    public async Task<Result<Guid>> Add(Location location, CancellationToken cancellationToken)
+    public async Task<Result<Guid, Error>> Add(Location location, CancellationToken cancellationToken)
     {
         try
         {
-            await _dbContext.Locations.AddAsync(location, cancellationToken);
+            _dbContext.Locations.Add(location);
         
             await _dbContext.SaveChangesAsync(cancellationToken);
         
@@ -28,9 +29,9 @@ public class EfCoreLocationsRepository : ILocationsRepository
         }
         catch (Exception exception)
         {
-            _logger.LogError(exception, exception.Message);
+            _logger.LogError(exception, "Не удалось сохранить Локацию {LocationId}",  location.Id);
             
-            return Result.Failure<Guid>(exception.Message);
+            return Error.Failure("location.add.failed", "Не удалось сохранить локацию");
         }
     }
 }
