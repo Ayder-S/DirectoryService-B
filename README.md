@@ -12,7 +12,7 @@
 
 ## Backend
 
-Стек: .NET 9, EF Core, PostgreSQL, Scalar (OpenAPI).
+Стек: .NET 10, EF Core, PostgreSQL, Scalar (OpenAPI).
 
 ### Запуск
 
