@@ -1,4 +1,5 @@
-﻿using DS.Domain.Relation;
+﻿using DS.Domain.Entities;
+using DS.Domain.Relation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -10,8 +11,11 @@ public class DepartmentLocationConfiguration : IEntityTypeConfiguration<Departme
     { 
         builder.ToTable("department_locations");
         
-        builder.HasKey(dl => dl.Id)
+        builder.HasKey(dl => dl.DepartmentLocationId)
             .HasName("pk_department_locations");
+
+        builder.Property(dl => dl.DepartmentLocationId)
+            .HasColumnName("id");
 
         builder.Property(dl => dl.DepartmentId)
             .HasColumnName("department_id")
@@ -21,16 +25,16 @@ public class DepartmentLocationConfiguration : IEntityTypeConfiguration<Departme
             .HasColumnName("location_id")
             .IsRequired();
 
-        builder.HasOne(d => d.Department)
-            .WithMany(d => d.Locations)
-            .HasForeignKey(d => d.DepartmentId)
+        builder.HasOne<Department>()
+            .WithMany()
+            .HasForeignKey(dl => dl.DepartmentId)
             .HasConstraintName("fk_department_locations_department_id")
             .OnDelete(DeleteBehavior.Cascade)
             .IsRequired();
         
-        builder.HasOne(d => d.Location)
-            .WithMany(d => d.Departments)
-            .HasForeignKey(d => d.LocationId)
+        builder.HasOne<Location>()
+            .WithMany()
+            .HasForeignKey(dl => dl.LocationId)
             .HasConstraintName("fk_department_locations_location_id")
             .OnDelete(DeleteBehavior.Cascade)
             .IsRequired();

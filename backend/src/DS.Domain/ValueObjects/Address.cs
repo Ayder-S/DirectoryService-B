@@ -36,6 +36,12 @@ public record Address
 
         if (string.IsNullOrWhiteSpace(city))
             return Error.Validation("city.is.required", "Город обязателен", "address.city");
+        
+        country = country.Trim();
+        city = city.Trim();
+        region = region.Trim();
+        street = street?.Trim();
+        building = building?.Trim();
 
         if (country.Length > LengthConstants.Address.MAX_LENGTH)
             return Error.Validation("country.is.not.valid", "Слишком длинное название страны", "address.country");
@@ -51,13 +57,7 @@ public record Address
 
         if (building?.Length > LengthConstants.Address.MAX_LENGTH)
             return Error.Validation("building.is.not.valid", "Слишком длинный номер здания", "address.building");
-
-        country = country.Trim();
-        city = city.Trim();
-        region = region.Trim();
-        street = street?.Trim();
-        building = building?.Trim();
-
+        
         return new Address(country, region, city, street, building);
     }
 }

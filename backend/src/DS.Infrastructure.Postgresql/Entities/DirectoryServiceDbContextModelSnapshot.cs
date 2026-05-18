@@ -17,7 +17,7 @@ namespace DS.Infrastructure.Postgresql.Entities
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.15")
+                .HasAnnotation("ProductVersion", "9.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -226,7 +226,7 @@ namespace DS.Infrastructure.Postgresql.Entities
 
                             b1.HasKey("LocationId");
 
-                            b1.ToTable("locations");
+                            b1.ToTable("locations", (string)null);
 
                             b1
                                 .ToJson("address")
