@@ -51,9 +51,8 @@ builder.Services.AddDbContext<DirectoryServiceDbContext>(
 
 builder.Services.AddSingleton<IDbConnectionFactory, NpgsqlConnectionFactory>();
 
-builder.Services.AddScoped<ILocationsRepository, EfCoreLocationsRepository>();
-
-  // builder.Services.AddScoped<ILocationsRepository, NpgsqlLocationsRepository>();
+// builder.Services.AddScoped<ILocationsRepository, EfCoreLocationsRepository>();
+builder.Services.AddScoped<ILocationsRepository, NpgsqlLocationsRepository>();
 
 
 builder.Services.AddApplication();
