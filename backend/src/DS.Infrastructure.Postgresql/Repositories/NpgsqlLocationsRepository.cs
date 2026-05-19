@@ -45,7 +45,6 @@ public class NpgsqlLocationsRepository : ILocationsRepository
             parameters.Add("UpdatedAt", location.UpdatedAt);
 
             // await connection.ExecuteAsync(locationInsertSql, parameters); // CancellationToken не передаётся в Dapper:
-            
             await connection.ExecuteAsync(new CommandDefinition(locationInsertSql, parameters, transaction, cancellationToken: cancellationToken));
             
             transaction.Commit();
