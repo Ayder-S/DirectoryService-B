@@ -1,14 +1,13 @@
 services:
     postgres:
-        container_name: postgres
-        image: postgres
+        image: postgres:18.3
         restart: always
         environment:
-            POSTGRES_DB: directory_service_db
-            POSTGRES_USER: ds_postgres
-            POSTGRES_PASSWORD: postgres
+            POSTGRES_DB: ${POSTGRES_DB}
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
         ports:
-            - "5434:5432"
+            - "${POSTGRES_PORT}:5432"
         volumes:
              - postgres-data:/var/lib/postgresql
 

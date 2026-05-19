@@ -1,4 +1,5 @@
-﻿using DS.Domain.Relation;
+﻿using DS.Domain.Entities;
+using DS.Domain.Relation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -10,8 +11,11 @@ public class DepartmentPositionConfiguration : IEntityTypeConfiguration<Departme
     { 
         builder.ToTable("department_positions");
         
-        builder.HasKey(dp => dp.Id)
+        builder.HasKey(dp => dp.DepartmentPositionId)
             .HasName("pk_department_positions");
+
+        builder.Property(dp => dp.DepartmentPositionId)
+            .HasColumnName("id");
 
         builder.Property(dp => dp.DepartmentId)
             .HasColumnName("department_id")
@@ -21,15 +25,15 @@ public class DepartmentPositionConfiguration : IEntityTypeConfiguration<Departme
             .HasColumnName("position_id")
             .IsRequired();
 
-        builder.HasOne(dp => dp.Department)
-            .WithMany(d => d.Positions)
+        builder.HasOne<Department>()
+            .WithMany()
             .HasForeignKey(dp => dp.DepartmentId)
             .HasConstraintName("fk_department_positions_department_id")
             .OnDelete(DeleteBehavior.Cascade)
             .IsRequired();
         
-        builder.HasOne(dp => dp.Position)
-            .WithMany(p => p.Departments)
+        builder.HasOne<Position>()
+            .WithMany()
             .HasForeignKey(dp => dp.PositionId)
             .HasConstraintName("fk_department_positions_position_id")
             .OnDelete(DeleteBehavior.Cascade)

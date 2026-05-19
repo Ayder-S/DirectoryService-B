@@ -1,5 +1,4 @@
 ﻿using CSharpFunctionalExtensions;
-using DS.Domain.Relation;
 using DS.Domain.ValueObjects;
 using Shared.AppFails;
 
@@ -7,13 +6,11 @@ namespace DS.Domain.Entities;
 
 public class Position
 {
-    private readonly List<DepartmentPosition> _departments = [];
-    
     private Position() { }
 
     private Position(Name name, Description description)
     {
-        Id = Guid.NewGuid();
+        Id = Guid.CreateVersion7();
         Name = name;
         Description = description;
         IsActive = true; 
@@ -21,8 +18,6 @@ public class Position
         UpdatedAt = DateTime.UtcNow;
     }
     
-    public IReadOnlyList<DepartmentPosition> Departments => _departments;
-
     public Guid Id { get; private set; }
 
     public Name Name { get; private set; }
